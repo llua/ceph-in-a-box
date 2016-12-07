@@ -1,0 +1,28 @@
+---
+driver:
+  name: docker
+  volume:
+    - <%= Dir::pwd %>:/vagrant
+  use_sudo: false
+  provision_command:
+    # provision commands should be kept in sync with vagrant_puppet.sh
+    - yum -y install https://yum.puppetlabs.com/puppetlabs-release-pc1-el-$(rpm -q --qf "%{version}" -f /etc/redhat-release).noarch.rpm
+    - yum -y install puppet-agent
+    - /opt/puppetlabs/bin/puppet module install zack/r10k
+    - /opt/puppetlabs/bin/puppet apply -e "class {'r10k':}"
+    - cat /etc/puppetlabs/code/hiera.yaml | /opt/puppetlabs/puppet/bin/ruby -0 -ryaml -ne 'h = YAML.load($_); h[:hierarchy] = "untracked"; h[:backends] = "yaml"; puts h.to_yaml' > /tmp/hiera.yaml
+    - cat /tmp/hiera.yaml > /etc/puppetlabs/code/hiera.yaml
+    - /usr/bin/systemctl enable sshd
+    - curl -L https://www.opscode.com/chef/install.sh | sh
+  run_command: /usr/sbin/init
+  privileged: true
+
+provisioner:
+  name: shell
+  script: scripts/vagrant_puppet.sh
+
+platforms:
+  - name: centos-7
+
+suites:
+  - name: ceph-aio

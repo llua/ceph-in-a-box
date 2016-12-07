@@ -1,0 +1,96 @@
+---
+php::manage_repos: false
+php::fpm: true
+php::composer: true
+php::composer::auto_update: true
+php::settings:
+  PHP/short_open_tag: 'On'
+  PHP/memory_limit: 256M
+  PHP/upload_max_filesize: 64M
+  PHP/allow_url_fopen: 'On'
+  PHP/allow_url_include: 'Off'
+  PHP/realpath_cache_size: 32k
+  PHP/realpath_cache_ttl: '7200'
+  Date/date.timezone: America/Detroit
+php::fpm::pools:
+  www:
+    user: nobody
+    group: nobody
+php::extensions:
+  gd: {}
+  mcrypt: {}
+  mysqlnd: {}
+  ioncube-loader: {}
+  soap: {}
+  pecl-imagick: {}
+  pecl-memcached: {}
+  xml: {}
+  gearman:
+    provider: pecl
+    header_packages:
+    - libgearman-devel
+mysql::server::root_password: strongpassword
+mysql::server::remove_default_accounts: true
+mysql::server::override_options:
+  mysqld:
+    bind-address: 0.0.0.0
+    max_connect_errors: '999999999'
+    wait_timeout: '28800'
+    skip-name-resolve: true
+ceph::profile::params::release: hammer
+ceph::profile::params::fsid: 31c6c27c-4383-424e-ac30-8d7b08326903
+ceph::profile::params::mon_key: AQCVZZ1Vwm+WJRAAlCJcyeMOf+bbM/q6hgo2vQ==
+ceph::profile::params::mon_initial_members: ceph-mon
+ceph::profile::params::mon_host: 192.168.42.11
+ceph::profile::params::authentication_type: cephx
+ceph::profile::params::osd_journal_size: 100
+ceph::profile::params::osd_pool_default_pg_num: 256
+ceph::profile::params::osd_pool_default_pgp_num: 256
+ceph::profile::params::osd_pool_default_size: 3
+ceph::profile::params::osd_pool_default_min_size: 2
+ceph::profile::params::client_keys:
+  client.admin:
+    secret: AQDLZp1Vg9VRGhAAQALeX1qaDZtt1HdH62Ub3A==
+    mode: '0600'
+    cap_mon: allow *
+    cap_osd: allow *
+    cap_mds: allow *
+    require: Exec[rm-keyring-%{::hostname}]
+redis::bind: 127.0.0.1
+redis::databases: 1
+redis::log_level: notice
+redis::maxclients: 10000
+redis::maxmemory: false
+redis::maxmemory_policy: allkeys-lru
+redis::port: 6379
+redis::save_db_to_disk: false
+redis::slowlog_log_slower_than: -1
+redis::slowlog_max_len: 1024
+redis::syslog_enabled: false
+redis::syslog_facility: false
+redis::timeout: 0
+apache::trace_enable: 'Off'
+apache::server_signature: 'Off'
+apache::server_tokens: Prod
+apache::mod::ssl::ssl_protocol:
+- all
+- -SSLv2
+- -SSLv3
+apache::mod::ssl::ssl_cipher: ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA
+memcached::logfile: /var/log/memcached.log
+memcached::syslog: false
+memcached::max_memory: false
+memcached::item_size: 2048
+memcached::lock_memory: false
+memcached::listen_ip: 0.0.0.0
+memcached::tcp_port: 11211
+memcached::udp_port: 0
+memcached::manage_firewall: false
+memcached::max_connections: 8192
+memcached::service_restart: true
+memcached::large_mem_pages: false
+cassandra::cluster_name: nocworx
+cassandra::endpoint_snitch: GossipingPropertyFileSnitch
+cassandra::listen_address: '%{::ipaddress}'
+cassandra::seeds: 127.0.0.1
+ksplice: 97e3934f9493aa34b93cfafcec68990fca94f1f52bde62d82b2b21a75ff237fd
