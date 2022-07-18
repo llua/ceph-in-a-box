@@ -9,7 +9,7 @@ class profiles::ceph_osd {
     $osds = $ceph::profile::params::osds
   }
 
-  Ceph_Config<| |> ->
+  #Ceph_Config<| |> ->
 
   class { '::ceph::osds':
     args => $osds,

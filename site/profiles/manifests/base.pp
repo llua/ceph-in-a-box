@@ -1,4 +1,4 @@
 class profiles::base {
-  include ::ntp
+  include ::chrony
   package{['zsh','vim']:}
 }

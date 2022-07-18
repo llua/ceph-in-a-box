@@ -1,12 +1,11 @@
 class profiles::ceph_common {
-  require ::ceph::profile::client
-
-  $settings = hiera_hash('ceph::conf::settings')
-  create_resources('ceph_config', $settings)
-
-  # required for sysvinit, can be removed when jewel releases
-  package {'redhat-lsb-core':
-    ensure => 'present',
+  Ceph::Key {
+    user  => 'ceph',
+    group => 'ceph',
   }
-  Package['redhat-lsb-core'] -> Service <| |>
+  require ::ceph::profile::client
+  create_resources(
+    'ceph_config',
+    lookup('ceph::conf::settings', Hash, 'deep')
+  )
 }

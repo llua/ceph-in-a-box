@@ -1,3 +1,6 @@
-.cache/
+.bundle/
+.kitchen/
 .ceph/
 .vagrant/
+vendor/
+Gemfile.lock
